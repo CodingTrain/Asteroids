@@ -6,8 +6,11 @@
 var ship;
 var asteroids = [];
 var lasers = [];
+var laserSoundEffect;
 
-var laserSoundEffect = new Audio('audio/pew.mp3');
+function preload(){
+  laserSoundEffect = loadSound('audio/pew.mp3');
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
