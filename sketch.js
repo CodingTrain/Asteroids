@@ -12,6 +12,8 @@ var canPlay = true;
 function preload() {
   laserSoundEffect = loadSound('audio/pew.mp3');
 }
+var score = 0;
+var points = 5;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -52,6 +54,7 @@ function draw() {
           }
           asteroids.splice(j, 1);
           lasers.splice(i, 1);
+          score += points;
           break;
         }
       }
@@ -63,7 +66,9 @@ function draw() {
   ship.update();
   ship.edges();
 
-
+  textSize(25);
+  fill(color(255));
+  text(score, 10, 30);
 }
 
 function keyReleased() {
