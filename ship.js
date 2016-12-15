@@ -83,10 +83,17 @@ function Ship() {
     } else {
       push();
       translate(this.pos.x, this.pos.y);
-      rotate(this.heading);
+      rotate(this.heading + PI / 2);
       fill(0);
       stroke(255);
-      triangle(-this.r, -this.r, -this.r, this.r, this.r, 0);
+      triangle(-this.r, this.r, this.r, this.r, 0, -this.r);
+
+      if(this.isBoosting) {
+        translate(0, this.r);
+        rotate(random(-PI / 4, PI / 4));
+        line(0, 0, 0, 10);
+      }
+
       pop();
     }
   }
