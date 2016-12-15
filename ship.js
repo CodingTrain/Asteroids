@@ -30,21 +30,31 @@ function Ship() {
   }
 
   this.hits = function(asteroid) {
-    var d = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
-    if (d < this.r + asteroid.r) {
-      return true;
-    } else {
-      return false;
+    var vertices = [
+      createVector(this.pos.x - this.r, this.pos.y - this.r),
+      createVector(this.pos.x - this.r, this.pos.y + this.r),
+      createVector(this.pos.x + this.r, this.pos.y +      0)
+    ];
+    var asteroid_vertices = asteroid.vertices();
+    for(var i = 0; i < asteroid_vertices.length; i++) {
+      for(var j = 0; j < vertices.length; j++) {
+        var opposite = vertices.slice(0);
+        opposite.splice(j, 1);
+        if(lineIntersect(opposite[0], opposite[1], asteroid_vertices[i], asteroid_vertices[(i + 1) % asteroid_vertices.length])) {
+          return true;
+        }
+      }
     }
+    return false;
   }
 
   this.render = function() {
     push();
     translate(this.pos.x, this.pos.y);
-    rotate(this.heading + PI / 2);
+    rotate(this.heading);
     fill(0);
     stroke(255);
-    triangle(-this.r, this.r, this.r, this.r, 0, -this.r);
+    triangle(-this.r, -this.r, -this.r, this.r, this.r, 0);
     pop();
   }
 
