@@ -1,3 +1,8 @@
+// Daniel Shiffman
+// http://codingrainbow.com
+// http://patreon.com/codingrainbow
+// Code for: https://youtu.be/hacZU523FyM
+
 function Ship() {
   this.pos = createVector(width / 2, height / 2);
   this.r = 20;

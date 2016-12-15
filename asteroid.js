@@ -1,3 +1,8 @@
+// Daniel Shiffman
+// http://codingrainbow.com
+// http://patreon.com/codingrainbow
+// Code for: https://youtu.be/hacZU523FyM
+
 function Asteroid(pos, r) {
   if (pos) {
     this.pos = pos.copy();
@@ -9,7 +14,6 @@ function Asteroid(pos, r) {
   } else {
     this.r = random(15, 50);
   }
-
 
   this.vel = p5.Vector.random2D();
   this.total = floor(random(5, 15));

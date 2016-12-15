@@ -1,3 +1,8 @@
+// Daniel Shiffman
+// http://codingrainbow.com
+// http://patreon.com/codingrainbow
+// Code for: https://youtu.be/hacZU523FyM
+
 function Laser(spos, angle) {
   this.pos = createVector(spos.x, spos.y);
   this.vel = p5.Vector.fromAngle(angle);
@@ -6,6 +11,7 @@ function Laser(spos, angle) {
   this.update = function() {
     this.pos.add(this.vel);
   }
+  
   this.render = function() {
     push();
     stroke(255);
