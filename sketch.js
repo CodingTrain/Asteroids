@@ -56,7 +56,7 @@ function draw() {
           score += points;
           if(asteroids.length == 0) {
           	level++;
-          	spawnAsteroids()
+          	spawnAsteroids();
           }
           break;
         }
