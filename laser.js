@@ -1,3 +1,8 @@
+// Daniel Shiffman
+// http://codingrainbow.com
+// http://patreon.com/codingrainbow
+// Code for: https://youtu.be/hacZU523FyM
+
 function Laser(spos, angle) {
   this.pos = createVector(spos.x, spos.y);
   this.vel = p5.Vector.fromAngle(angle);
@@ -20,12 +25,16 @@ function Laser(spos, angle) {
   }
 
   this.hits = function(asteroid) {
-    var d = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
-    if (d < asteroid.r) {
-      return true;
-    } else {
-      return false;
+    var last_pos = p5.Vector.sub(this.pos, this.vel);
+    var last_angle = p5.Vector.sub(last_pos, asteroid.pos).heading();
+    var new_angle = p5.Vector.sub(this.pos, asteroid.pos).heading();
+    var asteroid_vertices = asteroid.verticesFromAngles(last_angle, new_angle);
+    for(var i = 0; i < asteroid_vertices.length - 1; i++) {
+      if(lineIntersect(last_pos, this.pos, asteroid_vertices[i], asteroid_vertices[i + 1])) {
+        return true;
+      }
     }
+    return false;
   }
 
   this.offscreen = function() {
