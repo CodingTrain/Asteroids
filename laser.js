@@ -14,13 +14,17 @@ function Laser(spos, angle) {
   this.update = function() {
     this.pos.add(this.vel);
   }
-  
+
   this.render = function() {
     push();
     stroke(this.color[0], this.color[1], this.color[2]);
     strokeWeight(4);
     point(this.pos.x, this.pos.y);
     pop();
+  }
+
+  this.playSoundEffect = function(sound){
+    sound.play();
   }
 
   this.hits = function(asteroid) {
