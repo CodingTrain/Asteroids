@@ -21,9 +21,12 @@ function Asteroid(pos, r) {
   for (var i = 0; i < this.total; i++) {
     this.offset[i] = random(-this.r * 0.5, this.r * 0.5);
   }
+  this.rot = 0;
+  this.rotSpeed = random(-0.05, 0.05);
 
   this.update = function() {
     this.pos.add(this.vel);
+    this.rot += this.rotSpeed;
   }
 
   this.render = function() {
@@ -31,6 +34,7 @@ function Asteroid(pos, r) {
     stroke(255);
     noFill();
     translate(this.pos.x, this.pos.y);
+    rotate(this.rot);
     //ellipse(0, 0, this.r * 2);
     beginShape();
     for (var i = 0; i < this.total; i++) {
