@@ -42,8 +42,6 @@ function draw() {
     }
   }
 
-  console.log(lasers.length);
-
   ship.render();
   ship.turn();
   ship.update();
