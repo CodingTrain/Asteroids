@@ -14,13 +14,12 @@ function preload() {
 }
 var score = 0;
 var points = 5;
+var level = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   ship = new Ship();
-  for(var i = 0; i < 5; i++) {
-    asteroids.push(new Asteroid());
-  }
+  spawnAsteroids();
 }
 
 function draw() {
@@ -55,6 +54,10 @@ function draw() {
           asteroids.splice(j, 1);
           lasers.splice(i, 1);
           score += points;
+          if(asteroids.length == 0) {
+          	level++;
+          	spawnAsteroids()
+          }
           break;
         }
       }
@@ -69,6 +72,12 @@ function draw() {
   textSize(25);
   fill(color(255));
   text(score, 10, 30);
+}
+
+function spawnAsteroids() {
+  for (var i = 0; i < level + 5; i++) {
+    asteroids.push(new Asteroid());
+  }
 }
 
 function keyReleased() {
