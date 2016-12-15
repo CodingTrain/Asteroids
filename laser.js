@@ -6,12 +6,17 @@ function Laser(spos, angle) {
   this.update = function() {
     this.pos.add(this.vel);
   }
+
   this.render = function() {
     push();
     stroke(255);
     strokeWeight(4);
     point(this.pos.x, this.pos.y);
     pop();
+  }
+
+  this.playSoundEffect = function(sound){
+    sound.play();
   }
 
   this.hits = function(asteroid) {
