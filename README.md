@@ -25,3 +25,6 @@ I'll make a video about how to contribute soon too!
 * Add your name and link here!
 * Serge Korzh - https://github.com/qw8/Asteroids-1
 * Timo Köhler - https://navetk.github.io/Asteroids/
+
+Please join our Slack team to discuss any on-going development to the game.
+https://communityasteroids.slack.com/shared_invite/MTE4MDI4ODAzMDQ0LTE0ODE5MTU2NDMtZjc3MGIzM2M4ZA
