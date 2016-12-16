@@ -24,3 +24,4 @@ I'll make a video about how to contribute soon too!
 
 * Add your name and link here!
 * Serge Korzh - https://github.com/qw8/Asteroids-1
+* Timo Köhler - https://navetk.github.io/Asteroids/
