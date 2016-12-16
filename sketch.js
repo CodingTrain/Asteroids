@@ -73,11 +73,14 @@ function keyPressed() {
     var laser = new Laser(ship.pos, ship.heading);
     laser.playSoundEffect(laserSoundEffect);
     lasers.push(laser);
-  } if (keyCode === RIGHT_ARROW) {
+  }
+  if (keyCode === RIGHT_ARROW) {
     ship.setRotation(0.075);
-  } if (keyCode === LEFT_ARROW) {
+  }
+  if (keyCode === LEFT_ARROW) {
     ship.setRotation(-0.075);
-  } if (keyCode === UP_ARROW) {
+  }
+  if (keyCode === UP_ARROW) {
     ship.boosting(true);
   }
 }
