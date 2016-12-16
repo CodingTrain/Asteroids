@@ -3,24 +3,23 @@
 // http://patreon.com/codingrainbow
 // Code for: https://youtu.be/hacZU523FyM
 
-function Asteroid(pos, r, size) {
+function Asteroid(pos, r) {
   if (pos) {
     this.pos = pos.copy();
   } else {
     this.pos = createVector(random(width), random(height))
   }
   if (r) {
-    this.r = r * 0.6;
+    this.r = r * 0.5;
   } else {
-    this.r = random(40, 60);
+    this.r = random(15, 50);
   }
 
-  this.size = size;
   this.vel = p5.Vector.random2D();
-  this.total = floor(random(8, 15));
+  this.total = floor(random(5, 15));
   this.offset = [];
   for (var i = 0; i < this.total; i++) {
-    this.offset[i] = random(-this.r * 0.3, this.r * 0.3);
+    this.offset[i] = random(-this.r * 0.5, this.r * 0.5);
   }
   this.rot = 0;
   this.rotSpeed = random(-0.05, 0.05);
@@ -49,13 +48,10 @@ function Asteroid(pos, r, size) {
     pop();
   }
 
-  this.breakup = function () {
+  this.breakup = function() {
     var newA = [];
-    //if size is 0 return empty
-    if (size > 0) {
-      newA[0] = new Asteroid(this.pos, this.r, this.size - 1);
-      newA[1] = new Asteroid(this.pos, this.r, this.size - 1);
-    }
+    newA[0] = new Asteroid(this.pos, this.r);
+    newA[1] = new Asteroid(this.pos, this.r);
     return newA;
   }
 
