@@ -3,27 +3,34 @@
 // http://patreon.com/codingrainbow
 // Code for: https://youtu.be/hacZU523FyM
 
-function Ship() {
-  this.pos = createVector(width / 2, height / 2);
-  this.r = 20;
-  this.heading = 0;
-  this.rotation = 0;
-  this.vel = createVector(0, 0);
-  this.isBoosting = false;
+function Ship(pos, r) {
+  Entity.call(this, width / 2, height / 2, 20);
   this.isDestroyed = false;
   this.destroyFrames = 600;
 
-  this.boosting = function(b) {
-    this.isBoosting = b;
-  }
+  var scope = this;
+  input.registerAsListener(" ".charCodeAt(0), function(char, code, press) {
+      if (!press) {
+        return;
+      }
+
+      var laser = new Laser(scope.pos, scope.heading);
+      laser.playSoundEffect(laserSoundEffect);
+      lasers.push(laser);
+  });
+  input.registerAsListener(RIGHT_ARROW, function(char, code, press) { scope.setRotation(press ? 0.1 : 0); });
+  input.registerAsListener(LEFT_ARROW, function(char, code, press) { scope.setRotation(press ? -0.1 : 0); });
+  input.registerAsListener(UP_ARROW, function(char, code, press) { scope.setAccel(press ? 0.1 : 0); });
 
   this.update = function() {
-    if(this.isDestroyed)
+    Entity.prototype.update.call(this);
+    this.vel.mult(0.99);
+    if(this.isDestroyed) {
       for(var i = 0; i < this.brokenParts.length; i++) {
         this.brokenParts[i].pos.add(this.brokenParts[i].vel);
         this.brokenParts[i].heading += this.brokenParts[i].rot;
       }
-    else {
+    } else {
       if(this.isBoosting) {
         this.boost();
       }
@@ -97,26 +104,6 @@ function Ship() {
       pop();
     }
   }
-
-  this.edges = function() {
-    if(this.pos.x > width + this.r) {
-      this.pos.x = -this.r;
-    } else if(this.pos.x < -this.r) {
-      this.pos.x = width + this.r;
-    }
-    if(this.pos.y > height + this.r) {
-      this.pos.y = -this.r;
-    } else if(this.pos.y < -this.r) {
-      this.pos.y = height + this.r;
-    }
-  }
-
-  this.setRotation = function(a) {
-    this.rotation = a;
-  }
-
-  this.turn = function() {
-    this.heading += this.rotation;
-  }
-
 }
+
+Ship.prototype = Object.create(Entity.prototype);
