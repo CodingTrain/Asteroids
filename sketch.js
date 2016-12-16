@@ -27,6 +27,7 @@ function draw() {
     if(ship.hits(asteroids[i]) && canPlay) {
       canPlay = false;
       ship.destroy();
+      input.reset();
       setTimeout(function() {
         ship = new Ship();
         canPlay = true;
