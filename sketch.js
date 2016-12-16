@@ -8,7 +8,7 @@ var asteroids = [];
 var lasers = [];
 var laserSoundEffect;
 
-function preload(){
+function preload() {
   laserSoundEffect = loadSound('audio/pew.mp3');
 }
 
@@ -61,20 +61,23 @@ function draw() {
 }
 
 function keyReleased() {
-  ship.setRotation(0);
-  ship.boosting(false);
+  if (keyCode === RIGHT_ARROW || keyCode === LEFT_ARROW)
+    ship.setRotation(0);
+  if (keyCode === UP_ARROW) {
+    ship.boosting(false);
+  }
 }
 
 function keyPressed() {
-  if (key == ' ') {
+  if (key === " ") {
     var laser = new Laser(ship.pos, ship.heading);
     laser.playSoundEffect(laserSoundEffect);
     lasers.push(laser);
-  } else if (keyCode == RIGHT_ARROW) {
-    ship.setRotation(0.1);
-  } else if (keyCode == LEFT_ARROW) {
-    ship.setRotation(-0.1);
-  } else if (keyCode == UP_ARROW) {
+  } if (keyCode === RIGHT_ARROW) {
+    ship.setRotation(0.075);
+  } if (keyCode === LEFT_ARROW) {
+    ship.setRotation(-0.075);
+  } if (keyCode === UP_ARROW) {
     ship.boosting(true);
   }
 }
@@ -90,7 +93,7 @@ function lineIntersect(l1v1, l1v2, l2v1, l2v2) {
   var direction_cross = cross(l2_vector, l1_vector);
   var t = cross(base, l1_vector) / direction_cross;
   var u = cross(base, l2_vector) / direction_cross;
-  if(t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+  if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
     return true;
   } else {
     return false;
