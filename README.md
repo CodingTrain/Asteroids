@@ -1,5 +1,7 @@
 # Asteroids
 
+[![Join the chat at https://gitter.im/CodingRainbow/Asteroids](https://badges.gitter.im/CodingRainbow/Asteroids.svg)](https://gitter.im/CodingRainbow/Asteroids?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This repo is for the Asteroids project from Coding Challenge 45.
 
 ### Video Tutorials
