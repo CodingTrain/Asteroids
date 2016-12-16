@@ -10,6 +10,7 @@ var lasers = [];
 var laserSoundEffect;
 var explosionSoundEffects = [];
 var canPlay = true;
+var shieldTime = 180;
 
 function preload() {
   laserSoundEffect = loadSound('audio/pew.mp3');
@@ -65,6 +66,7 @@ function draw() {
         if(asteroids.length == 0) {
           level++;
           spawnAsteroids();
+          ship.shields = shieldTime;
         }
         break;
       }
