@@ -1,19 +1,27 @@
 var input = {
   listeners: {},
-  reset: function() {
-    this.listeners = {};
+
+  deregisterListener: function(id, index) {
+    delete this.listeners[index][id];
   },
-  registerAsListener: function(index, callback) {
+
+  registerListener: function(id, index, callback) {
     if (this.listeners[index] == undefined) {
-      this.listeners[index] = [];
+      this.listeners[index] = {};
+    }
+    if (this.listeners[index][id] == undefined) {
+      this.listeners[index][id] = [];
     }
 
-    this.listeners[index].push(callback);
+    this.listeners[index][id].push(callback);
   },
+  
   handleEvent: function(char, code, press) {
     if (this.listeners[code] != undefined) {
-      for (var i = 0; i < this.listeners[code].length; i++) {
-        this.listeners[code][i](char, code, press);
+      for (var i in this.listeners[code]) {
+        for (var j = 0; j < this.listeners[code][i].length; j++) {
+          this.listeners[code][i][j](char, code, press);
+        }
       }
     }
   }

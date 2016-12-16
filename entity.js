@@ -9,6 +9,10 @@ function Entity(x, y, radius)
   this.accelMagnitude = 0;
 }
 
+Entity.prototype.registerId = function(id) {
+  this.id = id;
+}
+
 Entity.prototype.update = function() {
   if (this.dead) {
     return true;

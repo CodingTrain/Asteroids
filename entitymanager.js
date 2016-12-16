@@ -3,7 +3,7 @@ function EntityManager() {
   var nextId = 0;
 
   this.add = function(entity) {
-    entity.id = nextId;
+    entity.registerId(nextId);
     entities[nextId++] = entity;
   }
 

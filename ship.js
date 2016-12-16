@@ -12,21 +12,24 @@ function Ship(pos, r) {
   var destroyFrames;
   var respawnFrames;
 
-  var scope = this;
-  input.registerAsListener(" ".charCodeAt(0), function(char, code, press) {
-    if (!press) {
-      return;
-    }
-
-    var offset = p5.Vector.fromAngle(scope.heading);
-    offset.mult(scope.r);
-    var laser = new Laser(p5.Vector.add(scope.pos, offset), scope.heading);
-    laser.playSoundEffect(laserSoundEffect);
-    entitymanager.add(laser);
-  });
-  input.registerAsListener(RIGHT_ARROW, function(char, code, press) { scope.setRotation(press ? 0.08 : 0); });
-  input.registerAsListener(LEFT_ARROW, function(char, code, press) { scope.setRotation(press ? -0.08 : 0); });
-  input.registerAsListener(UP_ARROW, function(char, code, press) { scope.setAccel(press ? 0.1 : 0); });
+  this.registerId = function(id) {
+    Entity.prototype.registerId.call(this, id);
+    var scope = this;
+    input.registerListener(id, " ".charCodeAt(0), function(char, code, press) {
+      if (!press) {
+        return;
+      }
+      
+      var offset = p5.Vector.fromAngle(scope.heading);
+      offset.mult(scope.r);
+      var laser = new Laser(p5.Vector.add(scope.pos, offset), scope.heading);
+      laser.playSoundEffect(laserSoundEffect);
+      entitymanager.add(laser);
+    });
+    input.registerListener(id, RIGHT_ARROW, function(char, code, press) { scope.setRotation(press ? 0.08 : 0); });
+    input.registerListener(id, LEFT_ARROW, function(char, code, press) { scope.setRotation(press ? -0.08 : 0); });
+    input.registerListener(id, UP_ARROW, function(char, code, press) { scope.setAccel(press ? 0.1 : 0); });
+  }
 
   this.update = function() {
     if(this.inFlux) {
@@ -48,6 +51,13 @@ function Ship(pos, r) {
     } else {
       var dead = Entity.prototype.update.call(this);
       this.vel.mult(0.99);
+      if (dead) {
+        input.deregisterListener(id, " ".charCodeAt(0));
+        input.deregisterListener(id, RIGHT_ARROW);
+        input.deregisterListener(id, LEFT_ARROW);
+        input.deregisterListener(id, UP_ARROW);
+      }
+
       return dead;
     }
   }
@@ -121,10 +131,10 @@ function Ship(pos, r) {
       rotate(this.heading);
       fill(0);
       stroke(255);
-      triangle(-this.r, -this.r, -this.r, this.r, thi
+      triangle(-this.r, -this.r, -this.r, this.r, this.r, 0);
       if(this.accelMagnitude !== 0) {
-        translate(0, this.r);
-        rotate(random(-PI / 4, PI / 4));
+        translate(-this.r, 0);
+        rotate(random(PI / 4, 3 * PI / 4));
         line(0, 0, 0, 10);
       }
 
