@@ -52,7 +52,7 @@ function draw() {
       if (lasers[i].hits(asteroids[j])) {
         asteroids[j].playSoundEffect(explosionSoundEffects);
         if (asteroids[j].r > 10) {
-          var newAsteroids = asteroids[j].breakup(explosionSoundEffects);
+          var newAsteroids = asteroids[j].breakup();
           asteroids = asteroids.concat(newAsteroids);
         }
         asteroids.splice(j, 1);
