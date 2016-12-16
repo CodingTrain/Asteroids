@@ -49,9 +49,9 @@ function Ship(pos, r) {
 
   this.hits = function(asteroid) {
     var vertices = [
-      createVector(this.pos.x - this.r, this.pos.y - this.r),
-      createVector(this.pos.x - this.r, this.pos.y + this.r),
-      createVector(this.pos.x + this.r, this.pos.y + 0)
+      createVector(this.pos.x - 2/3 * this.r, this.pos.y - this.r),
+      createVector(this.pos.x - 2/3 * this.r, this.pos.y + this.r),
+      createVector(this.pos.x + 4/3 * this.r, this.pos.y + 0)
     ];
     var asteroid_vertices = asteroid.vertices();
     for(var i = 0; i < asteroid_vertices.length; i++) {
