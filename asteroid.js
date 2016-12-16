@@ -3,22 +3,33 @@
 // http://patreon.com/codingrainbow
 // Code for: https://youtu.be/hacZU523FyM
 
-function Asteroid(pos, r) {
-  if (pos === undefined) {
-    pos = createVector(random(width), random(height))
+function Asteroid(pos, r, size) {
+  if (pos == null) {
+    pos = createVector(random(width), random(height));
   }
 
-  r = r !== undefined ? r * 0.5 : random(15, 30);
+  r = r != null ? r * 0.5 : random(40, 60);
   Entity.call(this, pos.x, pos.y, r);
 
   this.vel = p5.Vector.random2D();
-  this.total = floor(random(5, 15));
-  this.offset = [];
-  for (var i = 0; i < this.total; i++) {
-    this.offset[i] = random(-this.r * 0.5, this.r * 0.5);
+  this.total = floor(random(7, 15));
+
+  //smaller asteroids go a bit faster
+  this.size = size;
+  switch(size) {
+    case 1:
+      this.vel.mult(1.5); break;
+    case 0:
+      this.vel.mult(2); break;
   }
 
-  Entity.prototype.setRotation.call(this, random(-0.05, 0.05));
+
+  this.offset = [];
+  for (var i = 0; i < this.total; i++) {
+    this.offset[i] = random(-this.r * 0.2, this.r * 0.5);
+  }
+
+  Entity.prototype.setRotation.call(this, random(-0.03, 0.03));
 
   this.render = function() {
     push();
@@ -36,8 +47,15 @@ function Asteroid(pos, r) {
     pop();
   }
 
+  this.playSoundEffect = function(soundArray){
+    soundArray[floor(random(0,soundArray.length))].play();
+  }
+
   this.breakup = function() {
-    return [new Asteroid(this.pos, this.r), new Asteroid(this.pos, this.r)];
+    if(size > 0)
+      return [new Asteroid(this.pos, this.r, this.size-1), new Asteroid(this.pos, this.r, this.size-1)];
+    else
+      return [];
   }
 
   this.vertices = function() {

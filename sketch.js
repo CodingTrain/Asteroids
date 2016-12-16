@@ -4,21 +4,28 @@
 // Code for: https://youtu.be/hacZU523FyM
 
 var ship;
+var hud;
 var asteroids = [];
 var lasers = [];
 var laserSoundEffect;
+var explosionSoundEffects = [];
 var canPlay = true;
 
 function preload() {
   laserSoundEffect = loadSound('audio/pew.mp3');
+  for (var i =0; i < 3; i++){
+    explosionSoundEffects[i] = loadSound('audio/explosion-'+i+'.mp3');
+  }
 }
 var score = 0;
-var points = 5;
+var lives = 3;
+var points = [100, 50, 20]; // small, med, large points
 var level = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   ship = new Ship();
+  hud = new Hud();
   spawnAsteroids();
 }
 
@@ -29,8 +36,11 @@ function draw() {
       ship.destroy();
       input.reset();
       setTimeout(function() {
-        ship = new Ship();
-        canPlay = true;
+        lives--;
+        if(lives >= 0) {
+          ship = new Ship();
+          canPlay = true;
+        }
       }, 3000);
     }
     asteroids[i].update();
@@ -46,13 +56,12 @@ function draw() {
 
     for (var j = asteroids.length - 1; j >= 0; j--) {
       if (lasers[i].hits(asteroids[j])) {
-        if (asteroids[j].r > 10) {
-          var newAsteroids = asteroids[j].breakup();
-          asteroids = asteroids.concat(newAsteroids);
-        }
+        asteroids[j].playSoundEffect(explosionSoundEffects);
+        score += points[asteroids[j].size];
+        var newAsteroids = asteroids[j].breakup();
+        asteroids = asteroids.concat(newAsteroids);
         asteroids.splice(j, 1);
         lasers.splice(i, 1);
-        score += points;
         if(asteroids.length == 0) {
           level++;
           spawnAsteroids();
@@ -76,14 +85,12 @@ function draw() {
   }
 
   ship.render();
-  textSize(25);
-  fill(color(255));
-  text(score, 10, 30);
+  hud.render();
 }
 
 function spawnAsteroids() {
-  for (var i = 0; i < level + 5; i++) {
-    asteroids.push(new Asteroid());
+  for(var i = 0; i < level + 5; i++) {
+    asteroids.push(new Asteroid(null, null, 2));
   }
 }
 
