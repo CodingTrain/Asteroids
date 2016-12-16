@@ -18,8 +18,8 @@ function Ship(pos, r) {
       laser.playSoundEffect(laserSoundEffect);
       lasers.push(laser);
   });
-  input.registerAsListener(RIGHT_ARROW, function(char, code, press) { scope.setRotation(press ? 0.1 : 0); });
-  input.registerAsListener(LEFT_ARROW, function(char, code, press) { scope.setRotation(press ? -0.1 : 0); });
+  input.registerAsListener(RIGHT_ARROW, function(char, code, press) { scope.setRotation(press ? 0.08 : 0); });
+  input.registerAsListener(LEFT_ARROW, function(char, code, press) { scope.setRotation(press ? -0.08 : 0); });
   input.registerAsListener(UP_ARROW, function(char, code, press) { scope.setAccel(press ? 0.1 : 0); });
 
   this.update = function() {
