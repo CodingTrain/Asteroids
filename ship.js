@@ -13,11 +13,11 @@ function Ship() {
   this.isDestroyed = false;
   this.destroyFrames = 600;
 
-  this.boosting = function (b) {
+  this.boosting = function(b) {
     this.isBoosting = b;
   }
 
-  this.update = function () {
+  this.update = function() {
     if (this.isDestroyed)
       for (var i = 0; i < this.brokenParts.length; i++) {
         this.brokenParts[i].pos.add(this.brokenParts[i].vel);
@@ -32,14 +32,14 @@ function Ship() {
     }
   }
 
-  this.boost = function () {
+  this.boost = function() {
     var force = p5.Vector.fromAngle(this.heading);
     force.mult(0.1);
     this.vel.add(force);
   }
 
   this.brokenParts = [];
-  this.destroy = function () {
+  this.destroy = function() {
     this.isDestroyed = true;
     for (var i = 0; i < 4; i++)
       this.brokenParts[i] = {
@@ -50,7 +50,7 @@ function Ship() {
       };
   }
 
-  this.hits = function (asteroid) {
+  this.hits = function(asteroid) {
     var vertices = [
       createVector(this.pos.x - this.r, this.pos.y - this.r),
       createVector(this.pos.x - this.r, this.pos.y + this.r),
@@ -69,7 +69,7 @@ function Ship() {
     return false;
   }
 
-  this.render = function () {
+  this.render = function() {
     if (this.isDestroyed) {
       for (var i = 0; i < this.brokenParts.length; i++) {
         push();
@@ -91,7 +91,7 @@ function Ship() {
     }
   }
 
-  this.edges = function () {
+  this.edges = function() {
     if (this.pos.x > width + this.r) {
       this.pos.x = -this.r;
     } else if (this.pos.x < -this.r) {
@@ -104,11 +104,11 @@ function Ship() {
     }
   }
 
-  this.setRotation = function (a) {
+  this.setRotation = function(a) {
     this.rotation = a;
   }
 
-  this.turn = function () {
+  this.turn = function() {
     this.heading += this.rotation;
   }
 
