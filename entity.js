@@ -1,5 +1,4 @@
-function Entity(x, y, radius)
-{
+function Entity(x, y, radius) {
   this.pos = createVector(x, y);
   this.r = radius;
   this.heading = 0;
@@ -20,9 +19,14 @@ Entity.prototype.update = function() {
   this.edges();
 }
 
-Entity.prototype.setAccel = function(magnitude)
-{
+Entity.prototype.setAccel = function(magnitude) {
   this.accelMagnitude = magnitude;
+}
+
+Entity.prototype.hits = function(entity) {
+  var dx = this.pos.x - entity.pos.x;
+  var dy = this.pos.y - entity.pos.y;
+  return dx * dx + dy * dy < (this.r + entity.r) * (this.r + entity.r);
 }
 
 Entity.prototype.edges = function() {

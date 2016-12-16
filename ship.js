@@ -48,6 +48,10 @@ function Ship(pos, r) {
   }
 
   this.hits = function(asteroid) {
+    if (!Entity.prototype.hits.call(this, asteroid)) {
+      return false;
+    }
+
     var vertices = [
       createVector(this.pos.x - this.r, this.pos.y - this.r),
       createVector(this.pos.x - this.r, this.pos.y + this.r),

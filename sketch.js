@@ -111,3 +111,30 @@ function lineIntersect(l1v1, l1v2, l2v1, l2v2) {
     return false;
   }
 }
+
+function closestPointOnLine(lv1, lv2, pv){
+  var A1 = lv2.y - lv1.y;
+  var B1 = lv1.x - lv2.x;
+  var C1 = (lv2.y - lv1.y) * lv1.x + (lv1.x - lv2.x) * lv1.y;
+  var C2 = -B1 * pv.x + A1 * pv.y;
+  var det = A1 * A1 + B1 * B1;
+  var out;
+  if(det != 0){
+    out = createVector((A1 * C1 - B1 * C2) / det, (A1 * C2 + B1 * C1) / det)
+  } else {
+    out = pv.clone();
+  }
+
+  var v1 = p5.Vector.sub(lv1, lv2).magSq();
+  var d1 = p5.Vector.sub(out, lv1).magSq();
+  var d2 = p5.Vector.sub(out, lv2).magSq();
+  return d1 <= v1 && d2 <= v1 ? out : (d1 <= d2 ? lv1.copy() : lv2.copy());
+}
+
+function lineToCircleIntersect(lv1, lv2, cp1, cr) {
+  var lv1c = lv1.copy();
+  var lv2c = lv2.copy();
+  var closest = closestPointOnLine(lv1, lv2, cp1);
+  closest.sub(cp1);
+  return closest.dot(closest) <= cr * cr;
+}

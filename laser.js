@@ -28,6 +28,15 @@ function Laser(spos, angle) {
   }
 
   this.hits = function(asteroid) {
+    if (!Entity.prototype.hits.call(this, asteroid)) {
+      return false;
+    }
+
+    var last_pos = p5.Vector.sub(this.pos, this.vel);
+    if (lineToCircleIntersect(last_pos, this.pos, asteroid.pos, asteroid.smallr)) {
+      return true;
+    }
+
     var last_pos = p5.Vector.sub(this.pos, this.vel);
     var last_angle = p5.Vector.sub(last_pos, asteroid.pos).heading();
     var new_angle = p5.Vector.sub(this.pos, asteroid.pos).heading();
