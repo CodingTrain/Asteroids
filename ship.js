@@ -14,7 +14,7 @@ function Ship(pos, r) {
         return;
       }
 
-      var laser = new Laser(scope.pos, scope.heading);
+      var laser = new Laser(scope.pos, scope.vel, scope.heading);
       laser.playSoundEffect(laserSoundEffect);
       lasers.push(laser);
   });
