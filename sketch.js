@@ -8,10 +8,14 @@ var hud;
 var asteroids = [];
 var lasers = [];
 var laserSoundEffect;
+var explosionSoundEffects = [];
 var canPlay = true;
 
 function preload() {
   laserSoundEffect = loadSound('audio/pew.mp3');
+  for (var i =0; i < 3; i++){
+    explosionSoundEffects[i] = loadSound('audio/explosion-'+i+'.mp3');
+  }
 }
 var score = 0;
 var lives = 3;
@@ -50,8 +54,9 @@ function draw() {
       continue;
     }
 
-    for(var j = asteroids.length - 1; j >= 0; j--) {
-      if(lasers[i].hits(asteroids[j])) {
+    for (var j = asteroids.length - 1; j >= 0; j--) {
+      if (lasers[i].hits(asteroids[j])) {
+        asteroids[j].playSoundEffect(explosionSoundEffects);
         score += points[asteroids[j].size];
         var newAsteroids = asteroids[j].breakup();
         asteroids = asteroids.concat(newAsteroids);
