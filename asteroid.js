@@ -8,7 +8,7 @@ function Asteroid(pos, r, size) {
     pos = createVector(random(width), random(height));
   }
 
-  r = r != null ? r * 0.5 : random(40, 60);
+  r = r != null ? r : random(50, 70);
   Entity.call(this, pos.x, pos.y, r);
 
   this.vel = p5.Vector.random2D();
@@ -26,7 +26,7 @@ function Asteroid(pos, r, size) {
 
   this.offset = [];
   for (var i = 0; i < this.total; i++) {
-    this.offset[i] = random(-this.r * 0.2, this.r * 0.5);
+    this.offset[i] = random(-this.r * 0.6, 0);
   }
 
   Entity.prototype.setRotation.call(this, random(-0.03, 0.03));
@@ -53,7 +53,7 @@ function Asteroid(pos, r, size) {
 
   this.breakup = function() {
     if(size > 0)
-      return [new Asteroid(this.pos, this.r, this.size-1), new Asteroid(this.pos, this.r, this.size-1)];
+      return [new Asteroid(this.pos, this.r * 0.5, this.size-1), new Asteroid(this.pos, this.r * 0.5, this.size-1)];
     else
       return [];
   }
