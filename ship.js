@@ -7,6 +7,7 @@ function Ship(pos, r) {
   Entity.call(this, width / 2, height / 2, 20);
   this.isDestroyed = false;
   this.destroyFrames = 600;
+  this.shields = shieldTime;
 
   var scope = this;
   input.registerAsListener(" ".charCodeAt(0), function(char, code, press) {
@@ -33,6 +34,9 @@ function Ship(pos, r) {
     } else {
       this.vel.mult(0.99);
     }
+    if (this.shields > 0) {
+      this.shields -= 1;
+    }
   }
 
   this.brokenParts = [];
@@ -48,6 +52,9 @@ function Ship(pos, r) {
   }
 
   this.hits = function(asteroid) {
+    if (this.shields > 0) {
+      return false;
+    }
     var vertices = [
       createVector(this.pos.x - 2/3 * this.r, this.pos.y - this.r),
       createVector(this.pos.x - 2/3 * this.r, this.pos.y + this.r),
@@ -82,7 +89,8 @@ function Ship(pos, r) {
       translate(this.pos.x, this.pos.y);
       rotate(this.heading);
       fill(0);
-      stroke(255);
+      var shieldCol = random(map(this.shields, 0, shieldTime, 255, 0), 255);
+      stroke(shieldCol, shieldCol, 255);
       triangle(-2/3*this.r, -this.r, -2/3*this.r, this.r, 4/3*this.r, 0);
 
       if(this.accelMagnitude != 0) {
