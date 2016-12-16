@@ -1,5 +1,6 @@
 function Entity(x, y, radius)
 {
+  this.id = -1;
   this.pos = createVector(x, y);
   this.r = radius;
   this.heading = 0;
@@ -9,6 +10,10 @@ function Entity(x, y, radius)
 }
 
 Entity.prototype.update = function() {
+  if (this.dead) {
+    return true;
+  }
+
   this.heading += this.rotation;
 
   // Accelerate using the heading and the accelMagnitude
@@ -18,6 +23,16 @@ Entity.prototype.update = function() {
 
   this.pos.add(this.vel);
   this.edges();
+}
+
+Entity.prototype.render = function() {
+  push();
+  translate(this.pos.x, this.pos.y);
+  rotate(this.heading);
+  fill(0);
+  stroke(255);
+  ellipse(this.pos.x, this.pos.y, this.r);
+  pop();
 }
 
 Entity.prototype.setAccel = function(magnitude)
@@ -37,6 +52,15 @@ Entity.prototype.edges = function() {
     this.pos.y = height + this.r;
   }
 }
+
+Entity.prototype.collides = function(entity) {
+    var dx = this.pos.x - entity.pos.x;
+    var dy = this.pos.y - entity.pos.y;
+    var dr = this.r + entity.r;
+    return dx * dx + dy * dy <= dr * dr;
+}
+
+Entity.prototype.collision = function() {}
 
 Entity.prototype.setRotation = function(rot) {
   this.rotation = rot;

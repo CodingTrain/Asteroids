@@ -5,55 +5,68 @@
 
 function Ship(pos, r) {
   Entity.call(this, width / 2, height / 2, 20);
-  this.isDestroyed = false;
-  this.destroyFrames = 600;
+  this.inFlux = false;
+  this.lives = 3;
+  var destroyFramesReset = 200;
+  var respawnFramesReset = 300;
+  var destroyFrames;
+  var respawnFrames;
 
   var scope = this;
   input.registerAsListener(" ".charCodeAt(0), function(char, code, press) {
-      if (!press) {
-        return;
-      }
+    if (!press) {
+      return;
+    }
 
-      var laser = new Laser(scope.pos, scope.heading);
-      laser.playSoundEffect(laserSoundEffect);
-      lasers.push(laser);
+    var offset = p5.Vector.fromAngle(scope.heading);
+    offset.mult(scope.r);
+    var laser = new Laser(p5.Vector.add(scope.pos, offset), scope.heading);
+    laser.playSoundEffect(laserSoundEffect);
+    entitymanager.add(laser);
   });
   input.registerAsListener(RIGHT_ARROW, function(char, code, press) { scope.setRotation(press ? 0.08 : 0); });
   input.registerAsListener(LEFT_ARROW, function(char, code, press) { scope.setRotation(press ? -0.08 : 0); });
   input.registerAsListener(UP_ARROW, function(char, code, press) { scope.setAccel(press ? 0.1 : 0); });
 
   this.update = function() {
-    Entity.prototype.update.call(this);
-    this.vel.mult(0.99);
-    if(this.isDestroyed) {
-      for(var i = 0; i < this.brokenParts.length; i++) {
-        this.brokenParts[i].pos.add(this.brokenParts[i].vel);
-        this.brokenParts[i].heading += this.brokenParts[i].rot;
+    if(this.inFlux) {
+      if (destroyFrames > 0) {
+        for(var i = 0; i < this.brokenParts.length; i++) {
+          this.brokenParts[i].pos.add(this.brokenParts[i].vel);
+          this.brokenParts[i].heading += this.brokenParts[i].rot;
+        }
       }
+
+      if (respawnFrames <= 0) {
+        this.inFlux = false;
+        this.brokenParts.length = 0;
+        this.pos.set(width / 2, height / 2);
+        this.vel.set(0, 0);
+      }
+
+      respawnFrames--;
     } else {
+      var dead = Entity.prototype.update.call(this);
       this.vel.mult(0.99);
+      return dead;
     }
   }
 
   this.brokenParts = [];
-  this.destroy = function() {
-    this.isDestroyed = true;
-    for(var i = 0; i < 4; i++)
-      this.brokenParts[i] = {
-        pos: this.pos.copy(),
-        vel: p5.Vector.random2D(),
-        heading: random(0, 360),
-        rot: random(-0.07, 0.07)
-      };
-  }
 
-  this.hits = function(asteroid) {
+  this.collides = function(entity) {
+    if (this.inFlux ||
+        entity.toString() !== "[object Asteroid]" ||
+        !Entity.prototype.collides.call(this, entity)){
+      return false;
+    }
+
     var vertices = [
       createVector(this.pos.x - this.r, this.pos.y - this.r),
       createVector(this.pos.x - this.r, this.pos.y + this.r),
       createVector(this.pos.x + this.r, this.pos.y + 0)
     ];
-    var asteroid_vertices = asteroid.vertices();
+    var asteroid_vertices = entity.vertices();
     for(var i = 0; i < asteroid_vertices.length; i++) {
       for(var j = 0; j < vertices.length; j++) {
         var opposite = vertices.slice(0);
@@ -66,16 +79,41 @@ function Ship(pos, r) {
     return false;
   }
 
+  this.collision = function(entity) {
+    if (entity.toString(entity) === "[object Asteroid]") {
+      if (this.lives === 0) {
+        this.dead = true;
+        // TODO: Do something with this variable.
+        levelmanager.gameover = true;
+      } else {
+        this.inFlux = true;
+        destroyFrames = destroyFramesReset;
+        respawnFrames = respawnFramesReset;
+        for(var i = 0; i < 4; i++) {
+          this.brokenParts[i] = {
+            pos: this.pos.copy(),
+            vel: p5.Vector.random2D(),
+            heading: random(0, 360),
+            rot: random(-0.07, 0.07)
+          };
+        }
+      }
+    }
+  }
+
   this.render = function() {
-    if(this.isDestroyed) {
-      for(var i = 0; i < this.brokenParts.length; i++) {
-        push();
-        stroke(floor(255 * ((this.destroyFrames--) / 600)));
-        var bp = this.brokenParts[i];
-        translate(bp.pos.x, bp.pos.y);
-        rotate(bp.heading);
-        line(-this.r / 2, -this.r / 2, this.r / 2, this.r / 2);
-        pop();
+    if(this.inFlux) {
+      if (destroyFrames > 0) {
+        for(var i = 0; i < this.brokenParts.length; i++) {
+          push();
+          stroke(floor(255 * (destroyFrames / destroyFramesReset)));
+          var bp = this.brokenParts[i];
+          translate(bp.pos.x, bp.pos.y);
+          rotate(bp.heading);
+          line(-this.r / 2, -this.r / 2, this.r / 2, this.r / 2);
+          pop();
+        }
+        destroyFrames--;
       }
     } else {
       push();
@@ -83,17 +121,18 @@ function Ship(pos, r) {
       rotate(this.heading);
       fill(0);
       stroke(255);
-      triangle(-this.r, -this.r, -this.r, this.r, this.r, 0);
-
-      if(this.accelMagnitude != 0) {
-        translate(-this.r, 0);
-        rotate(random(PI / 4, 3 * PI / 4));
+      triangle(-this.r, -this.r, -this.r, this.r, thi
+      if(this.accelMagnitude !== 0) {
+        translate(0, this.r);
+        rotate(random(-PI / 4, PI / 4));
         line(0, 0, 0, 10);
       }
 
       pop();
     }
   }
+
+  this.toString = function() { return "[object Ship]"; }
 }
 
 Ship.prototype = Object.create(Entity.prototype);

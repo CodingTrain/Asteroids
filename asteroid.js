@@ -3,30 +3,36 @@
 // http://patreon.com/codingrainbow
 // Code for: https://youtu.be/hacZU523FyM
 
-function Asteroid(pos, r, size) {
-  if (pos == null) {
-    pos = createVector(random(width), random(height));
+function Asteroid(pos, r, life) {
+  if (pos === undefined) {
+    pos = createVector(random(width), random(height))
   }
 
-  r = r != null ? r * 0.5 : random(40, 60);
+  if (life === undefined) {
+    life = 1;
+  }
+
+  r = r !== undefined ? r * 0.5 : random(30, 45);
   Entity.call(this, pos.x, pos.y, r);
 
+  this.life = life;
   this.vel = p5.Vector.random2D();
   this.total = floor(random(7, 15));
 
   //smaller asteroids go a bit faster
-  this.size = size;
-  switch(size) {
-    case 1:
-      this.vel.mult(1.5); break;
+  switch(life) {
     case 0:
       this.vel.mult(2); break;
+    case 1:
+      this.vel.mult(1.5); break;
+    default:
+      this.vel.mult(1); break;
   }
 
 
   this.offset = [];
   for (var i = 0; i < this.total; i++) {
-    this.offset[i] = random(-this.r * 0.2, this.r * 0.5);
+    this.offset[i] = random(-this.r * 0.75, 0);
   }
 
   Entity.prototype.setRotation.call(this, random(-0.03, 0.03));
@@ -52,10 +58,11 @@ function Asteroid(pos, r, size) {
   }
 
   this.breakup = function() {
-    if(size > 0)
-      return [new Asteroid(this.pos, this.r, this.size-1), new Asteroid(this.pos, this.r, this.size-1)];
-    else
+    if (this.life === 0) {
       return [];
+    } else {
+      return [new Asteroid(this.pos, this.r, this.life - 1), new Asteroid(this.pos, this.r, this.life - 1)];
+    }
   }
 
   this.vertices = function() {
@@ -85,6 +92,22 @@ function Asteroid(pos, r, size) {
 
     return vertices;
   }
+
+  // Asteroid only cares about lasers and they do the check.
+  this.collides = function() {}
+
+  this.collision = function(entity) {
+    if (entity.toString() === "[object Laser]") {
+      this.dead = true;
+      var newAsteroids = this.breakup();
+      for (var i = 0; i < newAsteroids.length; i++) {
+        entitymanager.add(newAsteroids[i]);
+      }
+      levelmanager.scoreKill(newAsteroids.length);
+    }
+  }
+
+  this.toString = function() { return "[object Asteroid]"; }
 }
 
 Asteroid.prototype = Object.create(Entity.prototype);
