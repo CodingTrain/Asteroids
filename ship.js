@@ -31,18 +31,8 @@ function Ship(pos, r) {
         this.brokenParts[i].heading += this.brokenParts[i].rot;
       }
     } else {
-      if(this.isBoosting) {
-        this.boost();
-      }
-      this.pos.add(this.vel);
       this.vel.mult(0.99);
     }
-  }
-
-  this.boost = function() {
-    var force = p5.Vector.fromAngle(this.heading);
-    force.mult(0.1);
-    this.vel.add(force);
   }
 
   this.brokenParts = [];
@@ -90,14 +80,14 @@ function Ship(pos, r) {
     } else {
       push();
       translate(this.pos.x, this.pos.y);
-      rotate(this.heading + PI / 2);
+      rotate(this.heading);
       fill(0);
       stroke(255);
-      triangle(-this.r, this.r, this.r, this.r, 0, -this.r);
+      triangle(-this.r, -this.r, -this.r, this.r, this.r, 0);
 
-      if(this.isBoosting) {
-        translate(0, this.r);
-        rotate(random(-PI / 4, PI / 4));
+      if(this.accelMagnitude != 0) {
+        translate(-this.r, 0);
+        rotate(random(PI / 4, 3 * PI / 4));
         line(0, 0, 0, 10);
       }
 
