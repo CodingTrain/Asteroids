@@ -16,7 +16,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   ship = new Ship();
-  for (var i = 0; i < 5; i++) {
+  for(var i = 0; i < 5; i++) {
     asteroids.push(new Asteroid());
   }
 }
@@ -24,8 +24,8 @@ function setup() {
 function draw() {
   background(0);
 
-  for (var i = 0; i < asteroids.length; i++) {
-    if (ship.hits(asteroids[i]) && canPlay) {
+  for(var i = 0; i < asteroids.length; i++) {
+    if(ship.hits(asteroids[i]) && canPlay) {
       canPlay = false;
       ship.destroy();
       setTimeout(function() {
@@ -38,15 +38,15 @@ function draw() {
     asteroids[i].edges();
   }
 
-  for (var i = lasers.length - 1; i >= 0; i--) {
+  for(var i = lasers.length - 1; i >= 0; i--) {
     lasers[i].render();
     lasers[i].update();
-    if (lasers[i].offscreen()) {
+    if(lasers[i].offscreen()) {
       lasers.splice(i, 1);
     } else {
-      for (var j = asteroids.length - 1; j >= 0; j--) {
-        if (lasers[i].hits(asteroids[j])) {
-          if (asteroids[j].r > 10) {
+      for(var j = asteroids.length - 1; j >= 0; j--) {
+        if(lasers[i].hits(asteroids[j])) {
+          if(asteroids[j].r > 10) {
             var newAsteroids = asteroids[j].breakup();
             asteroids = asteroids.concat(newAsteroids);
           }
@@ -67,28 +67,28 @@ function draw() {
 }
 
 function keyReleased() {
-  if (keyCode === RIGHT_ARROW || keyCode === LEFT_ARROW)
+  if(keyCode === RIGHT_ARROW || keyCode === LEFT_ARROW)
     ship.setRotation(0);
-  if (keyCode === UP_ARROW) {
+  if(keyCode === UP_ARROW) {
     ship.boosting(false);
   }
 }
 
 function keyPressed() {
-  if (!canPlay)
+  if(!canPlay)
     return;
-  if (key === " ") {
+  if(key === " ") {
     var laser = new Laser(ship.pos, ship.heading);
     laser.playSoundEffect(laserSoundEffect);
     lasers.push(laser);
   }
-  if (keyCode === RIGHT_ARROW) {
+  if(keyCode === RIGHT_ARROW) {
     ship.setRotation(0.075);
   }
-  if (keyCode === LEFT_ARROW) {
+  if(keyCode === LEFT_ARROW) {
     ship.setRotation(-0.075);
   }
-  if (keyCode === UP_ARROW) {
+  if(keyCode === UP_ARROW) {
     ship.boosting(true);
   }
 }
@@ -104,7 +104,7 @@ function lineIntersect(l1v1, l1v2, l2v1, l2v2) {
   var direction_cross = cross(l2_vector, l1_vector);
   var t = cross(base, l1_vector) / direction_cross;
   var u = cross(base, l2_vector) / direction_cross;
-  if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+  if(t >= 0 && t <= 1 && u >= 0 && u <= 1) {
     return true;
   } else {
     return false;

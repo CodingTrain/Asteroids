@@ -18,13 +18,13 @@ function Ship() {
   }
 
   this.update = function() {
-    if (this.isDestroyed)
-      for (var i = 0; i < this.brokenParts.length; i++) {
+    if(this.isDestroyed)
+      for(var i = 0; i < this.brokenParts.length; i++) {
         this.brokenParts[i].pos.add(this.brokenParts[i].vel);
         this.brokenParts[i].heading += this.brokenParts[i].rot;
       }
     else {
-      if (this.isBoosting) {
+      if(this.isBoosting) {
         this.boost();
       }
       this.pos.add(this.vel);
@@ -41,7 +41,7 @@ function Ship() {
   this.brokenParts = [];
   this.destroy = function() {
     this.isDestroyed = true;
-    for (var i = 0; i < 4; i++)
+    for(var i = 0; i < 4; i++)
       this.brokenParts[i] = {
         pos: this.pos.copy(),
         vel: p5.Vector.random2D(),
@@ -57,11 +57,11 @@ function Ship() {
       createVector(this.pos.x + this.r, this.pos.y + 0)
     ];
     var asteroid_vertices = asteroid.vertices();
-    for (var i = 0; i < asteroid_vertices.length; i++) {
-      for (var j = 0; j < vertices.length; j++) {
+    for(var i = 0; i < asteroid_vertices.length; i++) {
+      for(var j = 0; j < vertices.length; j++) {
         var opposite = vertices.slice(0);
         opposite.splice(j, 1);
-        if (lineIntersect(opposite[0], opposite[1], asteroid_vertices[i], asteroid_vertices[(i + 1) % asteroid_vertices.length])) {
+        if(lineIntersect(opposite[0], opposite[1], asteroid_vertices[i], asteroid_vertices[(i + 1) % asteroid_vertices.length])) {
           return true;
         }
       }
@@ -70,8 +70,8 @@ function Ship() {
   }
 
   this.render = function() {
-    if (this.isDestroyed) {
-      for (var i = 0; i < this.brokenParts.length; i++) {
+    if(this.isDestroyed) {
+      for(var i = 0; i < this.brokenParts.length; i++) {
         push();
         stroke(floor(255 * ((this.destroyFrames--) / 600)));
         var bp = this.brokenParts[i];
@@ -92,14 +92,14 @@ function Ship() {
   }
 
   this.edges = function() {
-    if (this.pos.x > width + this.r) {
+    if(this.pos.x > width + this.r) {
       this.pos.x = -this.r;
-    } else if (this.pos.x < -this.r) {
+    } else if(this.pos.x < -this.r) {
       this.pos.x = width + this.r;
     }
-    if (this.pos.y > height + this.r) {
+    if(this.pos.y > height + this.r) {
       this.pos.y = -this.r;
-    } else if (this.pos.y < -this.r) {
+    } else if(this.pos.y < -this.r) {
       this.pos.y = height + this.r;
     }
   }
