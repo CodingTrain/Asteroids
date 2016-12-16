@@ -7,10 +7,14 @@ var ship;
 var asteroids = [];
 var lasers = [];
 var laserSoundEffect;
+var explosionSoundEffects = [];
 var canPlay = true;
 
 function preload() {
   laserSoundEffect = loadSound('audio/pew.mp3');
+  for (var i =0; i < 3; i++){
+    explosionSoundEffects[i] = loadSound('audio/explosion-'+i+'.mp3');
+  }
 }
 var score = 0;
 var points = 5;
@@ -46,8 +50,9 @@ function draw() {
 
     for (var j = asteroids.length - 1; j >= 0; j--) {
       if (lasers[i].hits(asteroids[j])) {
+        asteroids[j].playSoundEffect(explosionSoundEffects);
         if (asteroids[j].r > 10) {
-          var newAsteroids = asteroids[j].breakup();
+          var newAsteroids = asteroids[j].breakup(explosionSoundEffects);
           asteroids = asteroids.concat(newAsteroids);
         }
         asteroids.splice(j, 1);

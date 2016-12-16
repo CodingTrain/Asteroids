@@ -36,6 +36,10 @@ function Asteroid(pos, r) {
     pop();
   }
 
+  this.playSoundEffect = function(soundArray){
+    soundArray[floor(random(0,soundArray.length))].play();
+  }
+
   this.breakup = function() {
     return [new Asteroid(this.pos, this.r), new Asteroid(this.pos, this.r)];
   }
