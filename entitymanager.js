@@ -23,13 +23,22 @@ function EntityManager() {
   }
 
   this.checkCollisions = function() {
+    var x = 1;
     for (var i in entities) {
+      var y = x;
       for (var j in entities) {
-        if (i !== j && entities[j].collides(entities[i])) {
+        // Skip all the collisions we have already done.
+        if (y !== 0) {
+          y--;
+          continue;
+        }
+
+        if (entities[j].collides(entities[i]) || entities[i].collides(entities[j])) {
           entities[i].collision(entities[j]);
           entities[j].collision(entities[i]);
         }
       }
+      x++;
     }
   }
 }
