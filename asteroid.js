@@ -12,7 +12,7 @@ function Asteroid(pos, r, life) {
     life = 1;
   }
 
-  r = r !== undefined ? r * 0.5 : random(30, 45);
+  r = r !== undefined ? r : random(30, 60);
   Entity.call(this, pos.x, pos.y, r);
 
   this.life = life;
@@ -61,7 +61,7 @@ function Asteroid(pos, r, life) {
     if (this.life === 0) {
       return [];
     } else {
-      return [new Asteroid(this.pos, this.r, this.life - 1), new Asteroid(this.pos, this.r, this.life - 1)];
+      return [new Asteroid(this.pos, this.r * 0.5, this.life - 1), new Asteroid(this.pos, this.r * 0.5, this.life - 1)];
     }
   }
 
