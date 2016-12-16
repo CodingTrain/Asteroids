@@ -23,3 +23,4 @@ I'll make a video about how to contribute soon too!
 ### Viewer Remixes of the Game
 
 * Add your name and link here!
+* Serge Korzh - https://github.com/qw8/Asteroids-1
