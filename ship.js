@@ -7,6 +7,9 @@ function Ship(pos, r) {
   Entity.call(this, width / 2, height / 2, 20);
   this.isDestroyed = false;
   this.destroyFrames = 600;
+  this.invincible = true;
+  this.flash = true;
+  this.flashCount = 0;
 
   var scope = this;
   input.registerAsListener(" ".charCodeAt(0), function(char, code, press) {
@@ -48,6 +51,7 @@ function Ship(pos, r) {
   }
 
   this.hits = function(asteroid) {
+    if (this.invincible) return false;
     var vertices = [
       createVector(this.pos.x - this.r, this.pos.y - this.r),
       createVector(this.pos.x - this.r, this.pos.y + this.r),
@@ -82,7 +86,23 @@ function Ship(pos, r) {
       translate(this.pos.x, this.pos.y);
       rotate(this.heading);
       fill(0);
-      stroke(255);
+      if (this.invincible && this.flashCount <= 5){
+        //Ship is currently invincible
+        if(frameCount% 20== 0) {
+          if(this.flash){
+            stroke(255);
+            this.flashCount++;
+            console.log(this.flashCount);
+          }else{
+            stroke(0);
+            this.flash = !this.flash;
+          }
+        }
+      }else{
+        stroke(255);
+        this.invincible = false;
+        this.flashCount = 0;
+      }
       triangle(-this.r, -this.r, -this.r, this.r, this.r, 0);
 
       if(this.accelMagnitude != 0) {
