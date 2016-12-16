@@ -43,7 +43,7 @@ function Asteroid(pos, r) {
   this.vertices = function() {
     var vertices = []
     for(var i = 0; i < this.total; i++) {
-      var angle = map(i, 0, this.total, 0, TWO_PI);
+      var angle = this.heading + map(i, 0, this.total, 0, TWO_PI);
       var r = this.r + this.offset[i];
       vertices.push(p5.Vector.add(createVector(r * cos(angle), r * sin(angle)), this.pos));
     }
@@ -54,13 +54,13 @@ function Asteroid(pos, r) {
   this.verticesFromAngles = function(first_angle, second_angle) {
     var angle_difference = atan2(sin(second_angle-first_angle), cos(second_angle-first_angle));
     if(angle_difference < 0) return this.verticesFromAngles(second_angle, first_angle);
-    var lowest_node = floor(map(first_angle, -TWO_PI, TWO_PI, 0, 2*this.total));
-    var highest_node = ceil(map(second_angle, -TWO_PI, TWO_PI, 0, 2*this.total));
+    var lowest_node = floor(map(first_angle - this.heading, -TWO_PI, TWO_PI, 0, 2*this.total));
+    var highest_node = ceil(map(second_angle - this.heading, -TWO_PI, TWO_PI, 0, 2*this.total));
     if(highest_node < lowest_node) highest_node += this.total;
 
     var vertices = []
     for(var i = lowest_node; i <= highest_node; i++) {
-      var angle = map(i % this.total, 0, this.total, 0, TWO_PI);
+      var angle = this.heading + map(i % this.total, 0, this.total, 0, TWO_PI);
       var r = this.r + this.offset[i % this.total];
       vertices.push(createVector(r * cos(angle), r * sin(angle)).add(this.pos));
     }
