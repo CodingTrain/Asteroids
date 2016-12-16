@@ -83,7 +83,7 @@ function Ship(pos, r) {
       rotate(this.heading);
       fill(0);
       stroke(255);
-      triangle(-this.r, -this.r, -this.r, this.r, this.r, 0);
+      triangle(-2/3*this.r, -this.r, -2/3*this.r, this.r, 4/3*this.r, 0);
 
       if(this.accelMagnitude != 0) {
         translate(-this.r, 0);
