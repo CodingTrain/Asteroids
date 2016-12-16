@@ -1,4 +1,9 @@
-function Hud() {
+function Hud(ship) {
+  var asteroids = 0;
+  var score = 0;
+  var points = [100, 50, 20];
+  var level = 0;
+
   var size = 20;
   var padding = 10;
   var lifeWidth = 20;
@@ -25,16 +30,37 @@ function Hud() {
 
   ];
 
+  this.gameover = false;
+
+  this.scoreKill = function(newAsteroids, size) {
+    asteroids += newAsteroids - 1;
+    if (points[size] === undefined) {
+      console.log("Points are not defined for this size of asteroid.");
+    } else {
+      score += points[size];
+    }
+  }
+
+  this.check = function() {
+    if (asteroids === 0) {
+      asteroids = level + 5;
+      for (var i = 0; i < asteroids; i++) {
+        entitymanager.add(new Asteroid());
+      }
+      level++;
+    }
+  }
+
   this.render = function() {
     var scoreString = "" + score;
-    var digitPos = createVector((width / 2 - (scoreString.length * (size + padding)) / 2), padding);
+    var digitPos = createVector((width / 2 - (scoreString.length * (size + padding) - padding) / 2), padding);
     for(var i = 0; i < scoreString.length; i++) {
       var dmap = digitMaps[scoreString.charAt(i)];
       drawDigit(dmap, i, digitPos);
       digitPos.x += size + padding;
     }
     drawLives();
-    if(lives < 0) {
+    if(ship.lives <= 0) {
       push();
       textSize(32);
       fill(255);
@@ -46,8 +72,8 @@ function Hud() {
     push();
     stroke(255);
     fill(0);
-    var top = createVector((width / 2) + lifeWidth * 2, padding * 2 + size * 2);
-    for(var i = 0; i < lives; i++) {
+    var top = createVector((width / 2) + lifeWidth * ship.lives / 2, padding * 2 + size * 2);
+    for(var i = 0; i < ship.lives; i++) {
       triangle(top.x, top.y, top.x - lifeWidth / 2, top.y + 25, top.x + lifeWidth / 2, top.y + 25);
       top.x -= 20 + padding;
     }

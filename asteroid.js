@@ -12,7 +12,7 @@ function Asteroid(pos, r, life) {
     life = 1;
   }
 
-  r = r !== undefined ? r : random(30, 60);
+  r = r !== undefined ? r : random(40, 60);
   Entity.call(this, pos.x, pos.y, r);
 
   this.life = life;
@@ -103,7 +103,7 @@ function Asteroid(pos, r, life) {
       for (var i = 0; i < newAsteroids.length; i++) {
         entitymanager.add(newAsteroids[i]);
       }
-      levelmanager.scoreKill(newAsteroids.length);
+      hud.scoreKill(newAsteroids.length, this.life);
     }
   }
 

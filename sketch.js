@@ -14,29 +14,24 @@ function preload() {
     explosionSoundEffects[i] = loadSound('audio/explosion-'+i+'.mp3');
   }
 }
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  ship = new Ship();
-  hud = new Hud();
-  spawnAsteroids();
-}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   entitymanager = new EntityManager();
-  entitymanager.add(new Ship());
+  var ship = new Ship();
+  entitymanager.add(ship);
+  hud = new Hud(ship);
 }
 
 function draw() {
   // Update
   entitymanager.update();
   entitymanager.checkCollisions();
-  levelmanager.check();
+  hud.check();
 
   // Render
   background(0);
   entitymanager.render();
-  levelmanager.render();
   hud.render();
 }
 

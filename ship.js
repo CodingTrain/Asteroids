@@ -19,7 +19,7 @@ function Ship(pos, r) {
       if (!press) {
         return;
       }
-      
+
       var offset = p5.Vector.fromAngle(scope.heading);
       offset.mult(scope.r);
       var laser = new Laser(p5.Vector.add(scope.pos, offset), scope.heading);
@@ -97,6 +97,7 @@ function Ship(pos, r) {
         levelmanager.gameover = true;
       } else {
         this.inFlux = true;
+        this.lives--;
         destroyFrames = destroyFramesReset;
         respawnFrames = respawnFramesReset;
         for(var i = 0; i < 4; i++) {
