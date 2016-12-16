@@ -4,16 +4,12 @@
 // Code for: https://youtu.be/hacZU523FyM
 
 function Asteroid(pos, r) {
-  if (pos) {
-    this.pos = pos.copy();
-  } else {
-    this.pos = createVector(random(width), random(height))
+  if (pos === undefined) {
+    pos = createVector(random(width), random(height))
   }
-  if (r) {
-    this.r = r * 0.5;
-  } else {
-    this.r = random(15, 50);
-  }
+
+  r = r !== undefined ? r * 0.5 : random(15, 30);
+  Entity.call(this, pos.x, pos.y, r);
 
   this.vel = p5.Vector.random2D();
   this.total = floor(random(5, 15));
@@ -21,51 +17,27 @@ function Asteroid(pos, r) {
   for (var i = 0; i < this.total; i++) {
     this.offset[i] = random(-this.r * 0.5, this.r * 0.5);
   }
-  this.rot = 0;
-  this.rotSpeed = random(-0.05, 0.05);
 
-  this.update = function() {
-    this.pos.add(this.vel);
-    this.rot += this.rotSpeed;
-  }
+  Entity.prototype.setRotation.call(this, random(-0.05, 0.05));
 
   this.render = function() {
     push();
     stroke(255);
     noFill();
     translate(this.pos.x, this.pos.y);
-    rotate(this.rot);
-    //ellipse(0, 0, this.r * 2);
+    rotate(this.heading);
     beginShape();
     for (var i = 0; i < this.total; i++) {
       var angle = map(i, 0, this.total, 0, TWO_PI);
       var r = this.r + this.offset[i];
-      var x = r * cos(angle);
-      var y = r * sin(angle);
-      vertex(x, y);
+      vertex(r * cos(angle), r * sin(angle));
     }
     endShape(CLOSE);
     pop();
   }
 
   this.breakup = function() {
-    var newA = [];
-    newA[0] = new Asteroid(this.pos, this.r);
-    newA[1] = new Asteroid(this.pos, this.r);
-    return newA;
-  }
-
-  this.edges = function() {
-    if (this.pos.x > width + this.r) {
-      this.pos.x = -this.r;
-    } else if (this.pos.x < -this.r) {
-      this.pos.x = width + this.r;
-    }
-    if (this.pos.y > height + this.r) {
-      this.pos.y = -this.r;
-    } else if (this.pos.y < -this.r) {
-      this.pos.y = height + this.r;
-    }
+    return [new Asteroid(this.pos, this.r), new Asteroid(this.pos, this.r)];
   }
 
   this.vertices = function() {
@@ -73,9 +45,7 @@ function Asteroid(pos, r) {
     for(var i = 0; i < this.total; i++) {
       var angle = map(i, 0, this.total, 0, TWO_PI);
       var r = this.r + this.offset[i];
-      var x = r * cos(angle);
-      var y = r * sin(angle);
-      vertices.push(createVector(x, y).add(this.pos));
+      vertices.push(p5.Vector.add(createVector(r * cos(angle), r * sin(angle)), this.pos));
     }
 
     return vertices;
@@ -92,12 +62,11 @@ function Asteroid(pos, r) {
     for(var i = lowest_node; i <= highest_node; i++) {
       var angle = map(i % this.total, 0, this.total, 0, TWO_PI);
       var r = this.r + this.offset[i % this.total];
-      var x = r * cos(angle);
-      var y = r * sin(angle);
-      vertices.push(createVector(x, y).add(this.pos));
+      vertices.push(createVector(r * cos(angle), r * sin(angle)).add(this.pos));
     }
 
     return vertices;
   }
-
 }
+
+Asteroid.prototype = Object.create(Entity.prototype);
