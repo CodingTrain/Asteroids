@@ -7,32 +7,39 @@ var ship;
 var asteroids = [];
 var lasers = [];
 var laserSoundEffect;
+var canPlay = true;
 
-function preload(){
+function preload() {
   laserSoundEffect = loadSound('audio/pew.mp3');
 }
+var score = 0;
+var points = 5;
+var level = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   ship = new Ship();
-  for (var i = 0; i < 5; i++) {
-    asteroids.push(new Asteroid());
-  }
+  spawnAsteroids();
 }
 
 function draw() {
-  // Update
-  for (var i = 0; i < asteroids.length; i++) {
-    if (ship.hits(asteroids[i])) {
-      console.log('ooops!');
+  for(var i = 0; i < asteroids.length; i++) {
+    if(ship.hits(asteroids[i]) && canPlay) {
+      canPlay = false;
+      ship.destroy();
+      setTimeout(function() {
+        ship = new Ship();
+        canPlay = true;
+      }, 3000);
     }
     asteroids[i].update();
   }
 
-  for (var i = lasers.length - 1; i >= 0; i--) {
+  for(var i = lasers.length - 1; i >= 0; i--) {
     lasers[i].update();
-    if (lasers[i].offscreen()) {
+    if(lasers[i].offscreen()) {
       lasers.splice(i, 1);
+
       continue;
     }
 
@@ -44,6 +51,11 @@ function draw() {
         }
         asteroids.splice(j, 1);
         lasers.splice(i, 1);
+        score += points;
+        if(asteroids.length == 0) {
+          level++;
+          spawnAsteroids();
+        }
         break;
       }
     }
@@ -63,6 +75,15 @@ function draw() {
   }
 
   ship.render();
+  textSize(25);
+  fill(color(255));
+  text(score, 10, 30);
+}
+
+function spawnAsteroids() {
+  for (var i = 0; i < level + 5; i++) {
+    asteroids.push(new Asteroid());
+  }
 }
 
 function cross(v1, v2) {
