@@ -23,7 +23,8 @@ To submit a new issue, [file an issue describing your idea](https://github.com/C
 I'll make a video about how to contribute soon too!
 
 ### There... is another.... repository
-![oh, luke. stop whining.](http://i.giphy.com/xR1nUJm9Uee3u.gif)
+![oh, luke. stop whining.](http://i.giphy.com/QxHzTRigoD9HG.gif)
+
 **[asteroids-advanced](https://github.com/CodingRainbow/asteroids-advanced)** is setup for the developers who are *overly serious* about code and want the challenge of working in a way that more aptly mimics a team of software developers attempting to make a product. 
 
 Do you think you can handle it? 
