@@ -7,6 +7,7 @@ var ship;
 var hud;
 var asteroids = [];
 var lasers = [];
+var dust = [];
 var laserSoundEffect;
 var explosionSoundEffects = [];
 var canPlay = true;
@@ -59,6 +60,9 @@ function draw() {
       if (lasers[i].hits(asteroids[j])) {
         asteroids[j].playSoundEffect(explosionSoundEffects);
         score += points[asteroids[j].size];
+        var dustVel = p5.Vector.add(lasers[i].vel.mult(0.2), asteroids[j].vel);
+        var dustNum = (asteroids[j].size + 1) * 5;
+        addDust(asteroids[j].pos, dustVel, dustNum);
         var newAsteroids = asteroids[j].breakup();
         asteroids = asteroids.concat(newAsteroids);
         asteroids.splice(j, 1);
@@ -75,6 +79,13 @@ function draw() {
 
   ship.update();
 
+  for (var i = dust.length - 1; i >= 0; i--) {
+    dust[i].update();
+    if (dust[i].transparency <= 0) {
+      dust.splice(i, 1);
+    }
+  }
+  
   // Render
   background(0);
 
@@ -88,6 +99,10 @@ function draw() {
 
   ship.render();
   hud.render();
+  
+  for (var i = dust.length - 1; i >= 0; i--) {
+    dust[i].render();
+  }
 }
 
 function spawnAsteroids() {
