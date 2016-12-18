@@ -8,7 +8,7 @@ function Ship(pos, r) {
   this.isDestroyed = false;
   this.destroyFrames = 600;
   this.shields = shieldTime;
-  this.rmax = 4 / 3 * r;
+  this.rmax = 4 / 3 * this.r;
   this.rmax2 = this.rmax * this.rmax;
 
   var scope = this;
