@@ -17,7 +17,7 @@ function Ship(pos, r) {
       }
 
       var laser = new Laser(scope.pos, scope.heading);
-      laser.playSoundEffect(laserSoundEffect);
+      laser.playSoundEffect(laserSoundEffects[floor(random() * laserSoundEffects.length)]);
       lasers.push(laser);
   });
   input.registerAsListener(RIGHT_ARROW, function(char, code, press) { scope.setRotation(press ? 0.08 : 0); });
