@@ -8,6 +8,7 @@ function Ship(pos, r) {
   this.isDestroyed = false;
   this.destroyFrames = 600;
   this.shields = shieldTime;
+  this.rmax2 = 16 / 9 * r * r;
 
   var scope = this;
   input.registerAsListener(" ".charCodeAt(0), function(char, code, press) {
@@ -53,6 +54,10 @@ function Ship(pos, r) {
 
   this.hits = function(asteroid) {
     if (this.shields > 0) {
+      return false;
+    }
+    var dist2 = (this.pos.x - asteroid.pos.x) * (this.pos.x - asteroid.pos.x) + (this.pos.y - asteroid.pos.y) * (this.pos.y - asteroid.pos.y);
+    if (dist2 >= this.rmax2) {
       return false;
     }
     var vertices = [
