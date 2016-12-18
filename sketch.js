@@ -7,13 +7,15 @@ var ship;
 var hud;
 var asteroids = [];
 var lasers = [];
-var laserSoundEffect;
+var laserSoundEffects = [];
 var explosionSoundEffects = [];
 var canPlay = true;
 var shieldTime = 180;
 
 function preload() {
-  laserSoundEffect = loadSound('audio/pew.mp3');
+  for (var i =0; i < 3; i++){
+    laserSoundEffects[i] = loadSound('audio/pew-'+i+'.mp3');
+  }
   for (var i =0; i < 3; i++){
     explosionSoundEffects[i] = loadSound('audio/explosion-'+i+'.mp3');
   }
