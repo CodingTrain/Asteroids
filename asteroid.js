@@ -28,6 +28,10 @@ function Asteroid(pos, r, size) {
   for (var i = 0; i < this.total; i++) {
     this.offset[i] = random(-this.r * 0.2, this.r * 0.5);
   }
+  
+  // Calculate minimum and maximum radii squared
+  this.rmin2 = Math.pow(this.r + min(this.offset), 2);
+  this.rmax2 = Math.pow(this.r + max(this.offset), 2);
 
   Entity.prototype.setRotation.call(this, random(-0.03, 0.03));
 
