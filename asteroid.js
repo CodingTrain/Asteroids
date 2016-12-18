@@ -31,7 +31,8 @@ function Asteroid(pos, r, size) {
   
   // Calculate minimum and maximum radii squared
   this.rmin2 = Math.pow(this.r + min(this.offset), 2);
-  this.rmax2 = Math.pow(this.r + max(this.offset), 2);
+  this.rmax = this.r + max(this.offset);
+  this.rmax2 = this.rmax * this.rmax;
 
   Entity.prototype.setRotation.call(this, random(-0.03, 0.03));
 
