@@ -78,11 +78,7 @@ function Ship(pos, r) {
     }
 
     // Otherwise, we need to check for line intersection  
-    var vertices = [
-      p5.Vector.add(createVector(-2 / 3 * this.r, this.r).rotate(this.heading), this.pos),
-      p5.Vector.add(createVector(-2 / 3 * this.r, -this.r).rotate(this.heading), this.pos),
-      p5.Vector.add(createVector(4 / 3 * this.r, 0).rotate(this.heading), this.pos)
-    ];
+    var vertices = this.vertices();
     var asteroid_vertices = asteroid.vertices();
 
     for (var i = 0; i < asteroid_vertices.length; i++) {
@@ -123,6 +119,50 @@ function Ship(pos, r) {
 
       pop();
     }
+  }
+
+  this.vertices = function() {
+    return [
+      p5.Vector.add(createVector(-2 / 3 * this.r, this.r).rotate(this.heading), this.pos),
+      p5.Vector.add(createVector(-2 / 3 * this.r, -this.r).rotate(this.heading), this.pos),
+      p5.Vector.add(createVector(4 / 3 * this.r, 0).rotate(this.heading), this.pos)
+    ];
+  }
+
+  this.within = function(pnt) {
+    var p = this.vertices();
+    var area = 2 * this.r * this.r;
+    var s = 1 / (2 * area) * (p[0].y * p[2].x - p[0].x * p[2].y + (p[2].y - p[0].y) * pnt.x + (p[0].x - p[2].x) * pnt.y);
+    var t = 1 / (2 * area) * (p[0].x * p[1].y - p[0].y * p[1].x + (p[0].y - p[1].y) * pnt.x + (p[1].x - p[0].x) * pnt.y);
+    return (s >= 0 & t >= 0 & (1 - s - t) >= 0);
+  }
+
+  this.hits_seeker = function(seeker) {
+
+    // Are shields up?
+    if (this.shields > 0) {
+      return false;
+    }
+
+    // Is the ship far away?
+    var dist2 = (this.pos.x - seeker.pos.x) * (this.pos.x - seeker.pos.x) + (this.pos.y - seeker.pos.y) * (this.pos.y - seeker.pos.y);
+    if (dist2 > this.rmax2) {
+      return false;
+    }
+
+    // Otherwise check if the seeker is within the ship triangle
+    return this.within(seeker.pos);
+  }
+
+  this.hits_ufo = function(u) {
+
+    // Are shields up?
+    if (this.shields > 0) {
+      return false;
+    }
+
+    var dist2 = (this.pos.x - u.pos.x) * (this.pos.x - u.pos.x) + (this.pos.y - u.pos.y) * (this.pos.y - u.pos.y);
+    return (dist2 <= 2500);
   }
 }
 

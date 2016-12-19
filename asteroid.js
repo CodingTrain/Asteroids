@@ -11,7 +11,7 @@ function Asteroid(pos, r, size) {
   r = r != null ? r * 0.5 : random(40, 60);
   Entity.call(this, pos.x, pos.y, r);
 
-  this.vel = p5.Vector.random2D();
+  this.vel = p5.Vector.random2D().mult(1 + level / 100);
   this.total = floor(random(7, 15));
 
   //smaller asteroids go a bit faster
