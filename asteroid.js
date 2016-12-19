@@ -30,7 +30,8 @@ function Asteroid(pos, r, size) {
   }
   
   // Calculate minimum and maximum radii squared
-  this.rmin2 = Math.pow(this.r + min(this.offset), 2);
+  this.rmin = this.r + min(this.offset);
+  this.rmin2 = this.rmin * this.rmin;
   this.rmax = this.r + max(this.offset);
   this.rmax2 = this.rmax * this.rmax;
 
