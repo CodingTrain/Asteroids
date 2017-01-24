@@ -47,7 +47,7 @@ function Laser(spos, angle) {
   }
 
   this.hits = function(asteroid) {
-    dist2 = (this.pos.x - asteroid.pos.x) * (this.pos.x - asteroid.pos.x) + (this.pos.y - asteroid.pos.y) * (this.pos.y - asteroid.pos.y);
+    var dist2 = (this.pos.x - asteroid.pos.x) * (this.pos.x - asteroid.pos.x) + (this.pos.y - asteroid.pos.y) * (this.pos.y - asteroid.pos.y);
     if (dist2 <= asteroid.rmin2) {
       return true;
     }
@@ -78,7 +78,10 @@ function Laser(spos, angle) {
     return false;
   }
 
-
+  this.hits_ufo = function(u) {
+    var dist2 = (this.pos.x - u.pos.x) * (this.pos.x - u.pos.x) + (this.pos.y - u.pos.y) * (this.pos.y - u.pos.y);
+    return (dist2 <= 2500);
+  }
 }
 
 Laser.prototype = Object.create(Entity.prototype);
