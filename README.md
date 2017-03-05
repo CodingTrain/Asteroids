@@ -39,3 +39,4 @@ If you're still reading this far, I'm willing to bet you're just chomping at the
 * Serge Korzh - https://github.com/qw8/Asteroids-1
 * Timo Köhler - https://navetk.github.io/Asteroids/
 * Guille Giraldo - https://github.com/ggiraldo/Asteroids
+* Devon Gasparotto - https://github.com/Devgasparotto/Asteroids
