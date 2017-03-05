@@ -14,6 +14,7 @@ var canPlay = true;
 var shieldTime = 180;
 
 function preload() {
+  //Laser and Explosion Sound Effects are loaded here as opposed to the laser or asteroid files because the asteroid destruction logic is here and it also reduces redundancy of each asteroid or laser containing sound data
   for (var i =0; i < 3; i++){
     laserSoundEffects[i] = loadSound('audio/pew-'+i+'.mp3');
   }
@@ -34,6 +35,7 @@ function setup() {
 }
 
 function draw() {
+  //Handles the round loss, destruction of ship and round restart when ship contacts asteroid
   for(var i = 0; i < asteroids.length; i++) {
     if(ship.hits(asteroids[i]) && canPlay) {
       canPlay = false;
@@ -50,9 +52,11 @@ function draw() {
     asteroids[i].update();
   }
 
+  //Update the lasers position
   for(var i = lasers.length - 1; i >= 0; i--) {
     lasers[i].update();
     if(lasers[i].offscreen()) {
+      //Destroy lasers that go off screen
       lasers.splice(i, 1);
 
       continue;
@@ -60,16 +64,20 @@ function draw() {
 
     for (var j = asteroids.length - 1; j >= 0; j--) {
       if (lasers[i].hits(asteroids[j])) {
+        //Handle laser contact with asteroids - handles graphics and sounds - including asteroids that result from being hit
         asteroids[j].playSoundEffect(explosionSoundEffects);
         score += points[asteroids[j].size];
         var dustVel = p5.Vector.add(lasers[i].vel.mult(0.2), asteroids[j].vel);
         var dustNum = (asteroids[j].size + 1) * 5;
         addDust(asteroids[j].pos, dustVel, dustNum);
+        //The new smaller asteroids broken lasers are added to the same list of asteroids, so they can be referenced the same way as their full asteroid counterparts
         var newAsteroids = asteroids[j].breakup();
         asteroids = asteroids.concat(newAsteroids);
+        //Laser and previous asteroid are removed as per the rules of the game
         asteroids.splice(j, 1);
         lasers.splice(i, 1);
         if(asteroids.length == 0) {
+          //Next level
           level++;
           spawnAsteroids();
           ship.shields = shieldTime;

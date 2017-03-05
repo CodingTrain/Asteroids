@@ -3,6 +3,7 @@ function Hud() {
   var padding = 10;
   var lifeWidth = 20;
 
+  //digitMaps is used to create line representations of digits 0 through 9, the diagram below indicates the mapping of the digitMaps array index to its visual line
   /*
    --0--
    1   2
