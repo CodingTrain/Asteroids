@@ -26,7 +26,7 @@ var colors = [
 ]
 
 function Laser(spos, angle) {
-  //Create an instance of laser from its super class and specify its properties
+  //Create an instance of laser from its super class Entity. This is done instead of creating its own seperate object type because there is a large overlap in terms of properties
   Entity.call(this, spos.x, spos.y, 4);
 
   this.pos = createVector(spos.x, spos.y);
