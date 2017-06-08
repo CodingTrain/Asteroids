@@ -30,7 +30,8 @@ function Hud() {
 
   this.render = function() {
     var scoreString = "" + score;
-    var digitPos = createVector((width / 2 - (scoreString.length * (size + padding)) / 2), padding);
+    var x = (width - (scoreString.length * (size + padding))) / 2;
+    var digitPos = createVector(x, padding);
     for(var i = 0; i < scoreString.length; i++) {
       var dmap = digitMaps[scoreString.charAt(i)];
       drawDigit(dmap, i, digitPos);
@@ -51,7 +52,9 @@ function Hud() {
     fill(0);
     var top = createVector((width / 2) + lifeWidth * 2, padding * 2 + size * 2);
     for(var i = 0; i < lives; i++) {
-      triangle(top.x, top.y, top.x - lifeWidth / 2, top.y + 25, top.x + lifeWidth / 2, top.y + 25);
+      triangle(top.x,                 top.y     ,
+               top.x - lifeWidth / 2, top.y + 25,
+               top.x + lifeWidth / 2, top.y + 25);
       top.x -= 20 + padding;
     }
     pop();

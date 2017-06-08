@@ -54,7 +54,8 @@ function Laser(spos, angle) {
     // Evaluate if the asteroid was hit based on the range of the laser if one
     // of these conditions hold, then there is no need to check that the laser
     // intersected the asteroid.
-    dist2 = (this.pos.x - asteroid.pos.x) * (this.pos.x - asteroid.pos.x) + (this.pos.y - asteroid.pos.y) * (this.pos.y - asteroid.pos.y);
+    dist2 = (this.pos.x - asteroid.pos.x) * (this.pos.x - asteroid.pos.x)
+          + (this.pos.y - asteroid.pos.y) * (this.pos.y - asteroid.pos.y);
     if (dist2 <= asteroid.rmin2) {
       return true;
     }
@@ -68,11 +69,17 @@ function Laser(spos, angle) {
     var last_pos = p5.Vector.sub(this.pos, this.vel);
     var asteroid_vertices = asteroid.vertices();
     for (var i = 0; i < asteroid_vertices.length - 1; i++) {
-      if (lineIntersect(last_pos, this.pos, asteroid_vertices[i], asteroid_vertices[i + 1])) {
+      if (lineIntersect(last_pos,
+                        this.pos,
+                        asteroid_vertices[i],
+                        asteroid_vertices[i + 1])) {
         return true;
       }
     }
-    if (lineIntersect(last_pos, this.pos, asteroid_vertices[0], asteroid_vertices[asteroid_vertices.length - 1])) {
+    if (lineIntersect(last_pos,
+                      this.pos,
+                      asteroid_vertices[0],
+                      asteroid_vertices[asteroid_vertices.length - 1])) {
       return true;
     }
     return false;

@@ -18,7 +18,8 @@ function Ship(pos, r) {
     }
 
     var laser = new Laser(scope.pos, scope.heading);
-    laser.playSoundEffect(laserSoundEffects[floor(random() * laserSoundEffects.length)]);
+    var effect = laserSoundEffects[floor(random() * laserSoundEffects.length)];
+    laser.playSoundEffect(effect);
     lasers.push(laser);
   });
   input.registerAsListener(RIGHT_ARROW, function(char, code, press) {
@@ -67,7 +68,8 @@ function Ship(pos, r) {
     }
 
     // Is the ship far from the asteroid?
-    var dist2 = (this.pos.x - asteroid.pos.x) * (this.pos.x - asteroid.pos.x) + (this.pos.y - asteroid.pos.y) * (this.pos.y - asteroid.pos.y);
+    var dist2 = (this.pos.x - asteroid.pos.x) * (this.pos.x - asteroid.pos.x)
+              + (this.pos.y - asteroid.pos.y) * (this.pos.y - asteroid.pos.y);
     if (dist2 >= (asteroid.rmax + this.rmax2) * (asteroid.rmax + this.rmax2)) {
       return false;
     }
@@ -77,17 +79,22 @@ function Ship(pos, r) {
       return true;
     }
 
-    // Otherwise, we need to check for line intersection  
+    // Otherwise, we need to check for line intersection
     var vertices = [
-      p5.Vector.add(createVector(-2 / 3 * this.r, this.r).rotate(this.heading), this.pos),
-      p5.Vector.add(createVector(-2 / 3 * this.r, -this.r).rotate(this.heading), this.pos),
-      p5.Vector.add(createVector(4 / 3 * this.r, 0).rotate(this.heading), this.pos)
+      createVector(-2 / 3 * this.r, this.r).rotate(this.heading),
+      createVector(-2 / 3 * this.r, -this.r).rotate(this.heading),
+      createVector(4 / 3 * this.r, 0).rotate(this.heading)
     ];
+    for(var i = 0; i < vertices.length; i++) {
+      vertices[i] = p5.Vector.add(vertices[i], this.pos);
+    }
     var asteroid_vertices = asteroid.vertices();
 
     for (var i = 0; i < asteroid_vertices.length; i++) {
       for (var j = 0; j < vertices.length; j++) {
-        if (lineIntersect(vertices[j], vertices[(j + 1) % vertices.length], asteroid_vertices[i], asteroid_vertices[(i + 1) % asteroid_vertices.length])) {
+        var next_i = (i + 1) % asteroid_vertices.length;
+        if (lineIntersect(vertices[j], vertices[(j + 1) % vertices.length],
+                          asteroid_vertices[i], asteroid_vertices[next_i])) {
           return true;
         }
       }
@@ -113,7 +120,9 @@ function Ship(pos, r) {
       fill(0);
       var shieldCol = random(map(this.shields, 0, shieldTime, 255, 0), 255);
       stroke(shieldCol, shieldCol, 255);
-      triangle(-2 / 3 * this.r, -this.r, -2 / 3 * this.r, this.r, 4 / 3 * this.r, 0);
+      triangle(-2 / 3 * this.r, -this.r,
+               -2 / 3 * this.r, this.r,
+                4 / 3 * this.r, 0);
 
       if (this.accelMagnitude != 0) {
         translate(-this.r, 0);

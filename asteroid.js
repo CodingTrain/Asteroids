@@ -28,7 +28,7 @@ function Asteroid(pos, r, size) {
   for (var i = 0; i < this.total; i++) {
     this.offset[i] = random(-this.r * 0.2, this.r * 0.5);
   }
-  
+
   // Calculate minimum and maximum radii squared
   this.rmin = this.r + min(this.offset);
   this.rmin2 = this.rmin * this.rmin;
@@ -59,7 +59,10 @@ function Asteroid(pos, r, size) {
 
   this.breakup = function() {
     if(size > 0)
-      return [new Asteroid(this.pos, this.r, this.size-1), new Asteroid(this.pos, this.r, this.size-1)];
+      return [
+        new Asteroid(this.pos, this.r, this.size-1),
+        new Asteroid(this.pos, this.r, this.size-1)
+      ];
     else
       return [];
   }
@@ -69,7 +72,8 @@ function Asteroid(pos, r, size) {
     for(var i = 0; i < this.total; i++) {
       var angle = this.heading + map(i, 0, this.total, 0, TWO_PI);
       var r = this.r + this.offset[i];
-      vertices.push(p5.Vector.add(createVector(r * cos(angle), r * sin(angle)), this.pos));
+      var vec = createVector(r * cos(angle), r * sin(angle));
+      vertices.push(p5.Vector.add(vec, this.pos));
     }
 
     return vertices;
