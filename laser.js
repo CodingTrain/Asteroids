@@ -3,7 +3,7 @@
 // http://patreon.com/codingrainbow
 // Code for: https://youtu.be/hacZU523FyM
 
-//Array of RGB color choices that will be selected randomly for the laser color
+// Array of RGB color choices that will be selected randomly for the laser color
 var colors = [
   [248, 12, 18],
   [238, 17, 0],
@@ -26,7 +26,9 @@ var colors = [
 ]
 
 function Laser(spos, angle) {
-  //Create an instance of laser from its super class Entity. This is done instead of creating its own seperate object type because there is a large overlap in terms of properties
+  // Create an instance of laser from its super class Entity. This is done
+  // instead of creating its own seperate object type because there is a large
+  // overlap in terms of properties.
   Entity.call(this, spos.x, spos.y, 4);
 
   this.pos = createVector(spos.x, spos.y);
@@ -49,7 +51,9 @@ function Laser(spos, angle) {
   }
 
   this.hits = function(asteroid) {
-    //Evaluate if the asteroid was hit based on the range of the laser if one of these conditions hold, then there is no need to check that the laser intersected the asteroid
+    // Evaluate if the asteroid was hit based on the range of the laser if one
+    // of these conditions hold, then there is no need to check that the laser
+    // intersected the asteroid.
     dist2 = (this.pos.x - asteroid.pos.x) * (this.pos.x - asteroid.pos.x) + (this.pos.y - asteroid.pos.y) * (this.pos.y - asteroid.pos.y);
     if (dist2 <= asteroid.rmin2) {
       return true;
@@ -58,7 +62,9 @@ function Laser(spos, angle) {
       return false;
     }
 
-    //Evaluate if the laser intersected the asteroid, hit detection is evaluated based on hitting the line between adjacent vertices as these are the edges that form the asteroid
+    // Evaluate if the laser intersected the asteroid, hit detection is
+    // evaluated based on hitting the line between adjacent vertices as these
+    // are the edges that form the asteroid.
     var last_pos = p5.Vector.sub(this.pos, this.vel);
     var asteroid_vertices = asteroid.vertices();
     for (var i = 0; i < asteroid_vertices.length - 1; i++) {
