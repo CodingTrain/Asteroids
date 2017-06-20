@@ -41,4 +41,4 @@ If you're still reading this far, I'm willing to bet you're just chomping at the
 * Guille Giraldo - https://github.com/ggiraldo/Asteroids
 * Devon Gasparotto - https://github.com/Devgasparotto/Asteroids
 * Kristian Wichmann - https://github.com/kwichmann/Asteroids/
-* Mateusz Czyżnikiewicz - https://github.com/czyzi0/Asteroids
+* Mateusz Czyżnikiewicz (In Python) - https://github.com/czyzi0/Asteroids
