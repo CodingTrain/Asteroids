@@ -42,3 +42,4 @@ If you're still reading this far, I'm willing to bet you're just chomping at the
 * Devon Gasparotto - https://github.com/Devgasparotto/Asteroids
 * Kristian Wichmann - https://github.com/kwichmann/Asteroids/
 * Mateusz Czyżnikiewicz (In Python) - https://github.com/czyzi0/Asteroids
+* SetupandDraw - https://github.com/SetupandDraw/Learning-various-things-in-javascript/tree/gh-pages/asteroids_redux
