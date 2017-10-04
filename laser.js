@@ -25,7 +25,7 @@ var colors = [
   [68, 34, 153]
 ]
 
-function Laser(spos, angle) {
+function Laser(spos, svel, angle) {
   // Create an instance of laser from its super class Entity. This is done
   // instead of creating its own seperate object type because there is a large
   // overlap in terms of properties.
@@ -34,6 +34,7 @@ function Laser(spos, angle) {
   this.pos = createVector(spos.x, spos.y);
   this.vel = p5.Vector.fromAngle(angle);
   this.vel.mult(10);
+  this.vel.add(svel);
   this.color = colors[floor(random(0, colors.length - 1))];
 
   this.render = function() {
