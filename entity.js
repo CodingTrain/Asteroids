@@ -2,6 +2,7 @@ function Entity(x, y, radius)
 {
   this.pos = createVector(x, y);
   this.r = radius;
+  this.rmax = radius;
   this.heading = 0;
   this.rotation = 0;
   this.vel = createVector(0, 0);
@@ -26,15 +27,15 @@ Entity.prototype.setAccel = function(magnitude)
 }
 
 Entity.prototype.edges = function() {
-  if (this.pos.x > width + this.r) {
-    this.pos.x = -this.r;
-  } else if (this.pos.x < -this.r) {
-    this.pos.x = width + this.r;
+  if (this.pos.x > width + this.rmax) {
+    this.pos.x = -this.rmax;
+  } else if (this.pos.x < -this.rmax) {
+    this.pos.x = width + this.rmax;
   }
-  if (this.pos.y > height + this.r) {
-    this.pos.y = -this.r;
-  } else if (this.pos.y < -this.r) {
-    this.pos.y = height + this.r;
+  if (this.pos.y > height + this.rmax) {
+    this.pos.y = -this.rmax;
+  } else if (this.pos.y < -this.rmax) {
+    this.pos.y = height + this.rmax;
   }
 }
 

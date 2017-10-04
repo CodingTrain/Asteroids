@@ -4,40 +4,62 @@
 // Code for: https://youtu.be/hacZU523FyM
 
 var ship;
+var hud;
 var asteroids = [];
 var lasers = [];
-var laserSoundEffect;
+var laserSoundEffects = [];
+var dust = [];
+var explosionSoundEffects = [];
 var canPlay = true;
+var shieldTime = 180;
 
 function preload() {
-  laserSoundEffect = loadSound('audio/pew.mp3');
+  // Laser and Explosion Sound Effects are loaded here as opposed to the laser
+  // or asteroid files because the asteroid destruction logic is here and it
+  // also reduces redundancy of each asteroid or laser containing sound data.
+  for (var i =0; i < 3; i++){
+    laserSoundEffects[i] = loadSound('audio/pew-'+i+'.mp3');
+  }
+  for (var i =0; i < 3; i++){
+    explosionSoundEffects[i] = loadSound('audio/explosion-'+i+'.mp3');
+  }
 }
 var score = 0;
-var points = 5;
+var lives = 3;
+var points = [100, 50, 20]; // small, med, large points
 var level = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   ship = new Ship();
+  hud = new Hud();
   spawnAsteroids();
 }
 
 function draw() {
+  // Handles the round loss, destruction of ship and round restart when the
+  // ship contacts an asteroid.
   for(var i = 0; i < asteroids.length; i++) {
     if(ship.hits(asteroids[i]) && canPlay) {
       canPlay = false;
       ship.destroy();
+      input.reset();
       setTimeout(function() {
-        ship = new Ship();
-        canPlay = true;
+        lives--;
+        if(lives >= 0) {
+          ship = new Ship();
+          canPlay = true;
+        }
       }, 3000);
     }
     asteroids[i].update();
   }
 
+  // Update the lasers' positions
   for(var i = lasers.length - 1; i >= 0; i--) {
     lasers[i].update();
     if(lasers[i].offscreen()) {
+      // Destroy lasers that go off screen.
       lasers.splice(i, 1);
 
       continue;
@@ -45,16 +67,26 @@ function draw() {
 
     for (var j = asteroids.length - 1; j >= 0; j--) {
       if (lasers[i].hits(asteroids[j])) {
-        if (asteroids[j].r > 10) {
-          var newAsteroids = asteroids[j].breakup();
-          asteroids = asteroids.concat(newAsteroids);
-        }
+        // Handle laser contact with asteroids - handles graphics and sounds -
+        // including asteroids that result from being hit.
+        asteroids[j].playSoundEffect(explosionSoundEffects);
+        score += points[asteroids[j].size];
+        var dustVel = p5.Vector.add(lasers[i].vel.mult(0.2), asteroids[j].vel);
+        var dustNum = (asteroids[j].size + 1) * 5;
+        addDust(asteroids[j].pos, dustVel, dustNum);
+        // The new smaller asteroids broken lasers are added to the same list
+        // of asteroids, so they can be referenced the same way as their full
+        // asteroid counterparts.
+        var newAsteroids = asteroids[j].breakup();
+        asteroids = asteroids.concat(newAsteroids);
+        // Laser and previous asteroid are removed as per the rules of the game.
         asteroids.splice(j, 1);
         lasers.splice(i, 1);
-        score += points;
         if(asteroids.length == 0) {
+          // Next level
           level++;
           spawnAsteroids();
+          ship.shields = shieldTime;
         }
         break;
       }
@@ -62,6 +94,13 @@ function draw() {
   }
 
   ship.update();
+
+  for (var i = dust.length - 1; i >= 0; i--) {
+    dust[i].update();
+    if (dust[i].transparency <= 0) {
+      dust.splice(i, 1);
+    }
+  }
 
   // Render
   background(0);
@@ -75,14 +114,16 @@ function draw() {
   }
 
   ship.render();
-  textSize(25);
-  fill(color(255));
-  text(score, 10, 30);
+  hud.render();
+
+  for (var i = dust.length - 1; i >= 0; i--) {
+    dust[i].render();
+  }
 }
 
 function spawnAsteroids() {
-  for (var i = 0; i < level + 5; i++) {
-    asteroids.push(new Asteroid());
+  for(var i = 0; i < level + 5; i++) {
+    asteroids.push(new Asteroid(null, null, 2));
   }
 }
 
