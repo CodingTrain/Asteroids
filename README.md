@@ -7,7 +7,6 @@ This repo is for the Asteroids project from Coding Challenge 45.
 ### Video Tutorials
 1. Part 1: https://youtu.be/hacZU523FyM
 2. Part 2: https://youtu.be/xTTuih7P0c0
-3. Stay tuned for Siraj's tutorial!
 
 ### Play the game!
 * https://codingtrain.github.io/Asteroids/
